@@ -111,7 +111,7 @@ export default function LoginPage() {
 
           <div className="text-center">
             <Link href="/signup" className="text-sm text-primary-600 hover:text-primary-500">
-              Don't have an account? Sign up
+              Don&apos;t have an account? Sign up
             </Link>
           </div>
         </form>
