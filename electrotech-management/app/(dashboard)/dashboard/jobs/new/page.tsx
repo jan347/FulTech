@@ -29,7 +29,7 @@ export default function NewJobPage() {
       setCustomers(data || []);
     }
     fetchCustomers();
-  }, []);
+  }, [supabase]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();

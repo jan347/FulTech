@@ -1,26 +1,18 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import { createClient } from '@/lib/supabase/client';
 import Link from 'next/link';
 import { formatDate, formatCurrency } from '@/lib/utils';
 import type { Job } from '@/types/database';
 import { Plus, Calendar, MapPin } from 'lucide-react';
-import { saveJobOffline, addToSyncQueue } from '@/lib/offline/db';
-import { useApp } from '@/app/providers';
-
 export default function JobsPage() {
   const [jobs, setJobs] = useState<Job[]>([]);
   const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState<'all' | 'scheduled' | 'in_progress' | 'completed'>('all');
   const supabase = createClient();
-  const { isOnline } = useApp();
 
-  useEffect(() => {
-    fetchJobs();
-  }, [filter]);
-
-  async function fetchJobs() {
+  const fetchJobs = useCallback(async () => {
     try {
       let query = supabase.from('jobs').select('*, customers(name)').order('scheduled_start', { ascending: false });
 
@@ -29,7 +21,7 @@ export default function JobsPage() {
       }
 
       const { data, error } = await query;
-      
+
       if (error) throw error;
       setJobs(data || []);
     } catch (error) {
@@ -37,7 +29,11 @@ export default function JobsPage() {
     } finally {
       setLoading(false);
     }
-  }
+  }, [supabase, filter]);
+
+  useEffect(() => {
+    fetchJobs();
+  }, [fetchJobs]);
 
   const getStatusColor = (status: string) => {
     switch (status) {

@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { createClient } from '@/lib/supabase/client';
+import Image from 'next/image';
 import { UserCircle, Mail, Phone } from 'lucide-react';
 
 export default function ProfilePage() {
@@ -55,9 +56,9 @@ export default function ProfilePage() {
 
       <div className="bg-white rounded-lg shadow p-6">
         <div className="flex items-center space-x-6 mb-6">
-          <div className="h-20 w-20 rounded-full bg-gray-200 flex items-center justify-center">
+          <div className="h-20 w-20 rounded-full bg-gray-200 flex items-center justify-center overflow-hidden">
             {user?.avatar_url ? (
-              <img src={user.avatar_url} alt={user.full_name} className="h-20 w-20 rounded-full" />
+              <Image src={user.avatar_url} alt={user.full_name} width={80} height={80} className="h-20 w-20 rounded-full object-cover" />
             ) : (
               <UserCircle className="h-16 w-16 text-gray-400" />
             )}

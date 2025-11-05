@@ -1,22 +1,19 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import { createClient } from '@/lib/supabase/client';
 import Link from 'next/link';
+import Image from 'next/image';
 import type { Employee } from '@/types/database';
 import { Plus, UserCircle } from 'lucide-react';
-import { formatCurrency, formatDate } from '@/lib/utils';
+import { formatCurrency } from '@/lib/utils';
 
 export default function EmployeesPage() {
   const [employees, setEmployees] = useState<Employee[]>([]);
   const [loading, setLoading] = useState(true);
   const supabase = createClient();
 
-  useEffect(() => {
-    fetchEmployees();
-  }, []);
-
-  async function fetchEmployees() {
+  const fetchEmployees = useCallback(async () => {
     try {
       const { data, error } = await supabase
         .from('employees')
@@ -30,7 +27,11 @@ export default function EmployeesPage() {
     } finally {
       setLoading(false);
     }
-  }
+  }, [supabase]);
+
+  useEffect(() => {
+    fetchEmployees();
+  }, [fetchEmployees]);
 
   const getStatusColor = (status: string) => {
     switch (status) {
@@ -85,9 +86,9 @@ export default function EmployeesPage() {
                 >
                   <div className="flex items-center justify-between">
                     <div className="flex items-center space-x-4">
-                      <div className="h-12 w-12 rounded-full bg-gray-200 flex items-center justify-center">
+                      <div className="h-12 w-12 rounded-full bg-gray-200 flex items-center justify-center overflow-hidden">
                         {user?.avatar_url ? (
-                          <img src={user.avatar_url} alt={user.full_name} className="h-12 w-12 rounded-full" />
+                          <Image src={user.avatar_url} alt={user.full_name} width={48} height={48} className="h-12 w-12 rounded-full object-cover" />
                         ) : (
                           <UserCircle className="h-8 w-8 text-gray-400" />
                         )}

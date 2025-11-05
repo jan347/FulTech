@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import { createClient } from '@/lib/supabase/client';
 import Link from 'next/link';
 import type { Customer } from '@/types/database';
@@ -12,11 +12,7 @@ export default function CustomersPage() {
   const [searchTerm, setSearchTerm] = useState('');
   const supabase = createClient();
 
-  useEffect(() => {
-    fetchCustomers();
-  }, []);
-
-  async function fetchCustomers() {
+  const fetchCustomers = useCallback(async () => {
     try {
       const { data, error } = await supabase
         .from('customers')
@@ -30,7 +26,11 @@ export default function CustomersPage() {
     } finally {
       setLoading(false);
     }
-  }
+  }, [supabase]);
+
+  useEffect(() => {
+    fetchCustomers();
+  }, [fetchCustomers]);
 
   const filteredCustomers = customers.filter((customer) =>
     customer.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
