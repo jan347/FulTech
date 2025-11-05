@@ -1,5 +1,6 @@
 import { createServerComponentClient } from '@supabase/auth-helpers-nextjs';
 import { cookies } from 'next/headers';
+import type { Database } from '@/types/database.d';
 
 export const createServerClient = () => {
   // Validate environment variables (but don't throw during build - let it fail gracefully at runtime)
@@ -8,5 +9,5 @@ export const createServerClient = () => {
     console.warn('Missing Supabase environment variables. Please set NEXT_PUBLIC_SUPABASE_URL and NEXT_PUBLIC_SUPABASE_ANON_KEY');
   }
 
-  return createServerComponentClient({ cookies });
+  return createServerComponentClient<Database>({ cookies });
 };
