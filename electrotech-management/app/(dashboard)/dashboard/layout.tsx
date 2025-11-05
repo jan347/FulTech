@@ -3,6 +3,9 @@ import { createServerClient } from '@/lib/supabase/server';
 import Sidebar from '@/components/layout/Sidebar';
 import Header from '@/components/layout/Header';
 
+// Force dynamic rendering to prevent build-time errors when env vars are missing
+export const dynamic = 'force-dynamic';
+
 export default async function DashboardLayout({
   children,
 }: {
