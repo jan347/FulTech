@@ -4,14 +4,20 @@ import { cookies } from 'next/headers';
 import type { Database } from '@/types/database.d';
 
 export const createServerClient = () => {
-  // During build, we need to avoid calling cookies() which can hang
-  // Since we're using force-dynamic, pages won't be prerendered, but
-  // Next.js still analyzes the code during build
-  if (process.env.NEXT_PHASE === 'phase-production-build') {
-    // Use a direct Supabase client during build to avoid cookie access
+  // Check if we have valid environment variables
+  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+  const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+
+  // During build or if env vars are missing, return a basic client
+  if (
+    process.env.NEXT_PHASE === 'phase-production-build' ||
+    !supabaseUrl ||
+    !supabaseAnonKey
+  ) {
+    // Return a client with valid URL format even if it's not functional
     return createClient<Database>(
-      process.env.NEXT_PUBLIC_SUPABASE_URL || 'https://placeholder.supabase.co',
-      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || 'placeholder-key'
+      supabaseUrl || 'https://placeholder.supabase.co',
+      supabaseAnonKey || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBsYWNlaG9sZGVyIiwicm9sZSI6ImFub24iLCJpYXQiOjE2NDUxOTI4MDAsImV4cCI6MTk2MDc2ODgwMH0.placeholder'
     );
   }
 
