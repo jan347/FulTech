@@ -2,15 +2,17 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { 
-  LayoutDashboard, 
-  Calendar, 
-  Users, 
-  UserCircle, 
+import {
+  LayoutDashboard,
+  Calendar,
+  Users,
+  UserCircle,
   DollarSign,
   Building2,
   Menu,
-  X
+  X,
+  FileText,
+  CreditCard
 } from 'lucide-react';
 import { useState } from 'react';
 import { cn } from '@/lib/utils';
@@ -21,6 +23,8 @@ const navigation = [
   { name: 'Customers', href: '/dashboard/customers', icon: Building2 },
   { name: 'Employees', href: '/dashboard/employees', icon: Users },
   { name: 'Costs & Revenue', href: '/dashboard/finances', icon: DollarSign },
+  { name: 'Bank Statements', href: '/dashboard/bank-statements', icon: FileText },
+  { name: 'Transactions', href: '/dashboard/bank-transactions', icon: CreditCard },
   { name: 'Profile', href: '/dashboard/profile', icon: UserCircle },
 ];
 
